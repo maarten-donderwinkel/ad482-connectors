@@ -1,0 +1,3 @@
+com/redhat/energy/meter/producer/WindTurbine.class
+com/redhat/energy/meter/consumer/ReportingSystem.class
+com/redhat/energy/meter/common/Config.class
