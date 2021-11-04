@@ -10,13 +10,13 @@ import java.time.Instant;
 
 public class RequestCreatedEvent implements ExportedEvent<String, JsonNode> {
 
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     private final long id;
     private final JsonNode repairRequest;
     private final Instant timestamp;
 
-    private RequestCreatedEvent(long id, JsonNode repairRequest) {
+    RequestCreatedEvent(long id, JsonNode repairRequest) {
         this.id = id;
         this.repairRequest = repairRequest;
         this.timestamp = Instant.now();
@@ -24,7 +24,12 @@ public class RequestCreatedEvent implements ExportedEvent<String, JsonNode> {
 
     // TODO: Implement the method that initializes a RequestCreatedEvent object from a RepairRequest object.
     public static RequestCreatedEvent of(RepairRequest repairRequest) {
-        ObjectNode asJson = null;
+        ObjectNode asJson = mapper.createObjectNode()
+                .put("id", repairRequest.getId())
+                .put("requesterName", repairRequest.getRequesterName())
+                .put("requestDate", repairRequest.getRequestDate().toString())
+                .put("status", repairRequest.getStatus().toString())
+                .put("plumberId", repairRequest.getPlumberId());
         return new RequestCreatedEvent(repairRequest.getId(), asJson);
     }
 

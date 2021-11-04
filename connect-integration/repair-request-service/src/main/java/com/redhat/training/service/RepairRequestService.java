@@ -20,7 +20,7 @@ import java.util.List;
 public class RepairRequestService {
 
     @Inject
-    private PlumberService plumberService;
+    PlumberService plumberService;
 
     @Inject
     Event<ExportedEvent<?, ?>> event;
@@ -46,6 +46,7 @@ public class RepairRequestService {
         repairRequest.persist();
 
         // TODO: Fire a RequestCreatedEvent event
+        event.fire(RequestCreatedEvent.of(repairRequest));
 
         return repairRequest.getId();
     }
