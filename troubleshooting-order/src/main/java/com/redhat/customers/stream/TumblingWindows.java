@@ -35,6 +35,16 @@ public class TumblingWindows extends StreamProcessor {
                 = new ObjectMapperSerde<>(PotentialCustomersWereDetected.class);
 
         // TODO: Build the stream topology
+        builder.stream(
+                POTENTIAL_CUSTOMERS_TOPIC,
+                Consumed.with(Serdes.String(), customersEventSerde)
+        ).groupByKey()
+                .windowedBy(
+                        TimeWindows.of(Duration.ofSeconds(WINDOW_SIZE))
+                                .grace(Duration.ofSeconds(12))
+                ).count()
+                .toStream()
+                .print(Printed.toSysOut());
 
         streams = new KafkaStreams(
                 builder.build(),
